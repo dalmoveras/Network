@@ -7,6 +7,11 @@ import sys
 logging.basicConfig(filename='./fat3.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+LAYERS = {
+    'CORE':1,
+    'AGGREGATION':2,
+    'EDGE':3
+}
 
 class Switch():
     def __init__():
@@ -60,7 +65,30 @@ class Fat3(mininet.topo.Topo):
 
         mininet.topo.Topo.__init__(self)   
     
-    def build()
+    def build(self):
+        self._core_init(self.total_core_switches)
+        self._aggregation_init(self.total_aggregation_switches)
+        self._edge_init(self.total_edges_switches)
+        self._host_init(total_hosts)
+    
+    def _add_switch(self, LAYER, total)-> list:
+        return list(map(lambda x: self.core_layer.append('s'+str(LAYER)+'0'+str(x)), range(0,total)))
+
+    def _core_init(self, total):
+        logger.debug("[%] Core layer init [%]") 
+        self._add_switch(self, LAYERS['CORE'], total)
+
+    def _aggregation_init(self, total):
+        logger.debug("[%] Aggregation layer init [%]") 
+        self._add_switch(self, LAYERS['AGGREGATION'], total)
+        
+    def _edge_init(self, total):
+        logger.debug("[%] Edge layer init [%]") 
+        self._add_switch(self, LAYERS['EDGE'], total)   
+
+    def _hosts_init(self, total):
+        logger.debug("[%] Hosts init [%]")
+        self.host_layer = list(map(lambda x:self.host_layer.append('h0'+str(x)),range(0,total)))
 
 def main(number_of_pods: int, fanout: int, ip: str, port:int, bandwith=15, delay=1.0):
     topology = Fat3(number_of_pods, fanout)
