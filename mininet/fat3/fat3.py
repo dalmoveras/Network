@@ -1,6 +1,8 @@
 import mininet
 import logging
 import os
+import sys
+
 
 logging.basicConfig(filename='./fat3.log', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,7 +25,7 @@ class Pod():
         self.hosts = hosts
 
     def _hosts_descriptions():
-        pass#return list(map(lambda host: print(f"Host ==> {host.name}"),self.hosts ))
+        return list(map(lambda host: print(f"Host ==> {host.name}"),self.hosts ))
 
     def __str__(self):
         return f"[-] ==================== [-]\n \
@@ -56,4 +58,19 @@ class Fat3(mininet.topo.Topo):
         self.density = fanout
         self.total_hosts = fanout * total_edge_switches
 
-        mininet.topo.Topo.__init__(self)    
+        mininet.topo.Topo.__init__(self)   
+    
+    def build()
+
+def main(number_of_pods: int, fanout: int, ip: str, port:int, bandwith=15, delay=1.0):
+    topology = Fat3(number_of_pods, fanout)
+    topology.build()
+
+
+if __name__== '__main__':
+    if os.getuid() == 0:
+        main(4,2)
+    else:
+        logger.debug("Lack of privileges. Try again using sudo.\n")
+        sys.exit(1)
+
