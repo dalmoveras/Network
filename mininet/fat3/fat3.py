@@ -34,8 +34,9 @@ class Fat3(mininet.topo.Topo):
         self.total_edge_switches = int(k*k/2)
         self.density = fanout
         self.total_hosts = int(fanout * self.total_edge_switches)
-
+     
         mininet.topo.Topo.__init__(self)
+
         self.build()
 
     def build(self):
@@ -43,34 +44,51 @@ class Fat3(mininet.topo.Topo):
         self._aggregation_init(self.total_aggregation_switches)
         self._edge_init(self.total_edge_switches)
         self._host_init(self.total_hosts)
+        self._connect()
 
-    def _add_switch(self, LAYER, total) -> list:
+    def add_switch(self, LAYER, total) -> list:
         layer = None
         if LAYER == 'CORE':
-            layer = self.core_layer
+            list(map(lambda x: self.addSwitch('SC'+str(x)),range(1,total+1)))
         elif LAYER == 'AGGREGATION':
-            layer = self.aggregation_layer
-        else:
-            layer = self.edge_layer
-        list(map(lambda x: layer.append(
-            's'+LAYERS[LAYER]+'0'+str(x)), range(0, total)))
+            list(map(lambda x: self.addSwitch('SA'+str(x)), range(1, total+1)))
+        else:  
+            list(map(lambda x: self.addSwitch('SE'+str(x)), range(1, total+1)))
 
     def _core_init(self, total):
         logger.debug("[%] Core layer init [%]")
-        self._add_switch('CORE', total)
+        self.add_switch('CORE', total)
 
     def _aggregation_init(self, total):
         logger.debug("[%] Aggregation layer init [%]")
-        self._add_switch('AGGREGATION', total)
+        self.add_switch('AGGREGATION', total)
 
     def _edge_init(self, total):
         logger.debug("[%] Edge layer init [%]")
-        self._add_switch('EDGE', total)
+        self.add_switch('EDGE', total)
 
     def _host_init(self, total):
         logger.debug("[%] Hosts init [%]")
-        self.host_layer = list(
-            map(lambda x: self.host_layer.append('h0'+str(x)), range(0, total)))
+        list(map(lambda x: self.host_layer.append(
+            'h'+str(x)), range(1, self.total_hosts+1)))
+        list(map(lambda x: self.addHost(x), self.host_layer))   
+    
+    def _connect(self):
+        self._connect_core_to_aggregation()
+        self._connect_aggregation_to_edge()
+        self._connect_edge_to_hosts()
 
+    def _connect_core_to_aggregation(self):
+        even = ['SA2','SA4','SA6','SA8']
+        odd = ['SA1','SA3','SA5','SA7']
+        list(map(lambda x: self.addLink('SC1',x), odd))       
+        list(map(lambda x: self.addLink('SC2',x), odd))       
+        list(map(lambda x: self.addLink('SC3',x), even))       
+        list(map(lambda x: self.addLink('SC4',x), even))       
 
+    def _connect_aggregation_to_edge(self):
+        pass
+
+    def _connect_edge_to_hosts(self):
+        pass
 topos = {'fat3': (lambda: Fat3(4, 2))}
