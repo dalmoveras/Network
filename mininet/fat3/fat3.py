@@ -91,6 +91,9 @@ class Fat3(mininet.topo.Topo):
         even = ['SA2','SA4','SA6','SA8']
         odd = ['SA1','SA3','SA5','SA7']
         list(map(lambda x: self.addLink('SC1',x), odd))       
+        import pdb;pdb.set_trace()
+        z = list(map(lambda x: 'SC1'+'-'+x, odd))
+        
         list(map(lambda x: self.addLink('SC2',x), odd))       
         list(map(lambda x: self.addLink('SC3',x), even))       
         list(map(lambda x: self.addLink('SC4',x), even))       
@@ -104,7 +107,6 @@ class Fat3(mininet.topo.Topo):
   
     def _connect_edge_to_hosts(self):
         pointer = 0
-        import pdb;pdb.set_trace()
         for edge_switch in self.edge_layer:
             self.addLink(edge_switch, self.host_layer[pointer])
             self.addLink(edge_switch, self.host_layer[pointer+1])
