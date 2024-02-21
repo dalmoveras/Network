@@ -34,14 +34,14 @@ class Fat3(Topo):
 
         Topo.__init__(self)
 
-        self.create_nodes()
+        self._create_nodes()
         self._connect()
 
-    def create_nodes(self):
+    def _create_nodes(self):  
+        list(map(lambda x: self.addHost(x),self.host_layer))
         list(map(lambda x: self.addSwitch(x),self.core_layer))
         list(map(lambda x: self.addSwitch(x),self.aggregation_layer))
         list(map(lambda x: self.addSwitch(x),self.edge_layer))
-        list(map(lambda x: self.addSwitch(x),self.host_layer))
 
 
     def _connect(self):
