@@ -58,9 +58,28 @@ class Fat3(Topo):
             self.addLink(pod[1],pod[3])
   
     def _connect_edge_to_hosts(self):
-        import pdb;pdb.set_trace()
-        for i in range(1, self.total_edge_switches+1):
-            self.addLink('SE'+str(i),'H'+str(i) )
-            self.addLink('SE'+str(i),'H'+str(i+1) )
+        self.addLink('SE1','H1')
+        self.addLink('SE1','H2')
+        self.addLink('SE2','H3')
+        self.addLink('SE2','H4')
+        self.addLink('SE3','H5')
+        self.addLink('SE3','H6')
+        self.addLink('SE4','H7')
+        self.addLink('SE4','H8')
+        self.addLink('SE5','H9')
+        self.addLink('SE5','H10')
+        self.addLink('SE6','H11')
+        self.addLink('SE6','H12')
+        self.addLink('SE7','H13')
+        self.addLink('SE7','H14')
+        self.addLink('SE8','H15')
+        self.addLink('SE8','H16')
+        #edge_switches = list(map(lambda x: 'SE'+str(x), range(1, self.total_edge_switches+1)))
+        #hosts = list(map(lambda x: 'H'+str(x), range(1, self.total_hosts+1)))
+        #index = 0
+        #for sw in edge_switches:
+        #    self.addLink(sw,hosts[index])
+        #    self.addLink(sw,hosts[index+1])
+        #    index+=2
 
 topos = {'fat3': (lambda: Fat3(4, 2))}
